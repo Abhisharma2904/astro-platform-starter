@@ -1,0 +1,124 @@
+#<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student-Admin Portal</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+    .container { padding: 20px; }
+    .dashboard { display: none; }
+    .admin-section, .student-section { display: none; }
+    input, select, button, label, textarea { margin: 5px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    .clickable { cursor: pointer; color: blue; }
+    .notice-board { background: #fff9c4; padding: 10px; margin-top: 10px; border: 1px solid #fbc02d; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="login-section">
+      <h2>Login</h2>
+      <label for="username">Username:</label>
+      <input type="text" id="username" />
+      <label for="password">Password:</label>
+      <input type="password" id="password" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <div id="admin-dashboard" class="dashboard admin-section">
+      <h2>Admin Dashboard</h2>
+      <button onclick="logout()">Logout</button>
+      <h3>Notices</h3>
+      <textarea id="notice-input" placeholder="Enter notice..."></textarea>
+      <button onclick="addNotice()">Add Notice</button>
+      <div id="notice-board" class="notice-board"></div>
+
+      <h3>Add New Student</h3>
+      <input type="text" id="new-student-id" placeholder="Student ID" />
+      <input type="text" id="new-student-name" placeholder="Student Name" />
+      <button onclick="addStudent()">Add</button>
+
+      <h3>Student Records</h3>
+      <div id="student-list"></div>
+
+      <h3>Upload Homework</h3>
+      <label>Select Students:</label>
+      <select id="homework-students" multiple></select><br />
+      <label>Upload File:</label>
+      <input type="file" id="homework-file" /><br />
+      <button onclick="uploadHomework()">Upload</button>
+
+      <h3>Upload Test</h3>
+      <input type="file" id="test-file" accept="application/pdf,image/*" />
+      <button onclick="uploadTest()">Upload Test</button>
+    </div>
+
+    <div id="student-dashboard" class="dashboard student-section">
+      <h2>Student Dashboard</h2>
+      <button onclick="logout()">Logout</button>
+      <div id="student-info"></div>
+      <h3>Homework</h3>
+      <div id="student-homework"></div>
+      <h3>Tests</h3>
+      <div id="student-tests"></div>
+      <h3>Notices</h3>
+      <div id="student-notices"></div>
+    </div>
+  </div>
+
+  <script>
+    const admins = {
+      "Abhi Sharma": "8492",
+      "Anshu Sharma": "8492",
+      "Poonam Sharma": "8492"
+    };
+
+    let students = {};
+    let notices = [];
+    let tests = [];
+    let homeworks = {};
+ Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
